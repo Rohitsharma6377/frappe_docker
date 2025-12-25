@@ -21,12 +21,25 @@ services:
     image: redis:7-alpine
 
   backend:
-    image: frappe/erpnext:version-15
-    depends_on:
-      - db
-      - redis-cache
-      - redis-queue
-      - redis-socketio
+    <<: *backend_defaults
+    platform: linux/amd64
+
+  frontend:
+    <<: *customizable_image
+    platform: linux/amd64
+    command:
+      - nginx-entrypoint.sh
+    environment:
+      BACKEND: backend:8000
+      SOCKETIO: websocket:9000
+      FRAPPE_SITE_NAME_HEADER: ${FRAPPE_SITE_NAME_HEADER:-$$host}
+      UPSTREAM_REAL_IP_ADDRESS: ${UPSTREAM_REAL_IP_ADDRESS:-127.0.0.1}
+      UPSTREAM_REAL_IP_HEADER: ${UPSTREAM_REAL_IP_HEADER:-X-Forwarded-For}
+      UPSTREAM_REAL_IP_RECURSIVE: ${UPSTREAM_REAL_IP_RECURSIVE:-off}
+      PROXY_READ_TIMEOUT: ${PROXY_READ_TIMEOUT:-120}
+      CLIENT_MAX_BODY_SIZE: ${CLIENT_MAX_BODY_SIZE:-50m}
+    ports:
+      - "8080:8080"
     volumes:
       - sites:/home/frappe/frappe-bench/sites
 
@@ -52,6 +65,31 @@ services:
       - backend
     volumes:
       - sites:/home/frappe/frappe-bench/sites
+
+  redis-cache:
+    image: redis:7-alpine
+    restart: unless-stopped
+
+  redis-queue:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis-queue-data:/data
+
+  db:
+    image: mariadb:10.6
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-123}
+      MARIADB_ROOT_PASSWORD: ${DB_PASSWORD:-123}
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --innodb-large-prefix=1
+      - --innodb-file-format=Barracuda
+      - --skip-innodb-read-only-compressed
+    volumes:
+      - db-data:/var/lib/mysql
+    restart: unless-stopped
 
   queue-short:
     image: frappe/erpnext:version-15
@@ -97,4 +135,5 @@ services:
 
 volumes:
   sites:
+  redis-queue-data:
   db-data:
