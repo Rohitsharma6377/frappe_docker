@@ -60,6 +60,8 @@ services:
       UPSTREAM_REAL_IP_RECURSIVE: ${UPSTREAM_REAL_IP_RECURSIVE:-off}
       PROXY_READ_TIMEOUT: ${PROXY_READ_TIMEOUT:-120}
       CLIENT_MAX_BODY_SIZE: ${CLIENT_MAX_BODY_SIZE:-50m}
+    ports:
+      - "8080:8080"
     volumes:
       - sites:/home/frappe/frappe-bench/sites
     depends_on:
@@ -74,6 +76,31 @@ services:
       - /home/frappe/frappe-bench/apps/frappe/socketio.js
     volumes:
       - sites:/home/frappe/frappe-bench/sites
+
+  redis-cache:
+    image: redis:7-alpine
+    restart: unless-stopped
+
+  redis-queue:
+    image: redis:7-alpine
+    restart: unless-stopped
+    volumes:
+      - redis-queue-data:/data
+
+  db:
+    image: mariadb:10.6
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-123}
+      MARIADB_ROOT_PASSWORD: ${DB_PASSWORD:-123}
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+      - --innodb-large-prefix=1
+      - --innodb-file-format=Barracuda
+      - --skip-innodb-read-only-compressed
+    volumes:
+      - db-data:/var/lib/mysql
+    restart: unless-stopped
 
   queue-short:
     <<: *backend_defaults
@@ -93,3 +120,5 @@ services:
 # ERPNext requires local assets access (Frappe does not)
 volumes:
   sites:
+  redis-queue-data:
+  db-data:
