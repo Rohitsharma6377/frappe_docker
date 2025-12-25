@@ -1,0 +1,21 @@
+{
+  "doctype": "DocType",
+  "name": "Opportunity Plus",
+  "module": "Custom CRM",
+  "custom": 1,
+  "is_single": 0,
+  "fields": [
+    {"fieldname": "opportunity_name", "label": "Opportunity Name", "fieldtype": "Data", "reqd": 1},
+    {"fieldname": "lead", "label": "Lead", "fieldtype": "Link", "options": "Lead Plus"},
+    {"fieldname": "customer", "label": "Customer", "fieldtype": "Link", "options": "Customer"},
+    {"fieldname": "expected_value", "label": "Expected Value", "fieldtype": "Currency"},
+    {"fieldname": "stage", "label": "Stage", "fieldtype": "Select", "options": "Prospecting\nNegotiation\nWon\nLost", "default": "Prospecting"},
+    {"fieldname": "probability", "label": "Probability", "fieldtype": "Percent"},
+    {"fieldname": "expected_closure_date", "label": "Expected Closure Date", "fieldtype": "Date"},
+    {"fieldname": "assigned_to", "label": "Assigned To", "fieldtype": "Link", "options": "User"}
+  ],
+  "permissions": [
+    {"role": "CRM User", "read": 1, "write": 1},
+    {"role": "CRM Manager", "read": 1, "write": 1, "create": 1}
+  ]
+}

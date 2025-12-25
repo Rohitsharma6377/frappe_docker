@@ -1,0 +1,20 @@
+{
+  "doctype": "DocType",
+  "name": "Follow Up",
+  "module": "Custom CRM",
+  "custom": 1,
+  "is_single": 0,
+  "fields": [
+    {"fieldname": "reference_type", "label": "Reference Type", "fieldtype": "Select", "options": "Lead Plus\nOpportunity Plus", "reqd": 1},
+    {"fieldname": "reference_name", "label": "Reference Name", "fieldtype": "Dynamic Link", "options": "reference_type", "reqd": 1},
+    {"fieldname": "follow_up_date", "label": "Follow Up Date", "fieldtype": "Date", "reqd": 1},
+    {"fieldname": "follow_up_time", "label": "Follow Up Time", "fieldtype": "Time"},
+    {"fieldname": "assigned_to", "label": "Assigned To", "fieldtype": "Link", "options": "User"},
+    {"fieldname": "status", "label": "Status", "fieldtype": "Select", "options": "Pending\nDone\nMissed", "default": "Pending"},
+    {"fieldname": "remarks", "label": "Remarks", "fieldtype": "Small Text"}
+  ],
+  "permissions": [
+    {"role": "CRM User", "read": 1, "write": 1},
+    {"role": "CRM Manager", "read": 1, "write": 1, "create": 1}
+  ]
+}

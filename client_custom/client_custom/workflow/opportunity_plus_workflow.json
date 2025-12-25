@@ -1,0 +1,17 @@
+{
+  "doctype": "Workflow",
+  "workflow_name": "Opportunity Plus Workflow",
+  "document_type": "Opportunity Plus",
+  "is_active": 1,
+  "states": [
+    {"state": "Draft", "allow_edit": 1},
+    {"state": "Manager Approval", "allow_edit": 0},
+    {"state": "Won", "allow_edit": 0},
+    {"state": "Lost", "allow_edit": 0}
+  ],
+  "transitions": [
+    {"state": "Draft", "next_state": "Manager Approval", "allowed": ["CRM User"]},
+    {"state": "Manager Approval", "next_state": "Won", "allowed": ["CRM Manager"]},
+    {"state": "Manager Approval", "next_state": "Lost", "allowed": ["CRM Manager"]}
+  ]
+}

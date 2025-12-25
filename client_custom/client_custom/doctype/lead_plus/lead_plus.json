@@ -1,0 +1,22 @@
+{
+  "doctype": "DocType",
+  "name": "Lead Plus",
+  "module": "Custom CRM",
+  "custom": 1,
+  "is_single": 0,
+  "fields": [
+    {"fieldname": "lead_name", "label": "Lead Name", "fieldtype": "Data", "reqd": 1},
+    {"fieldname": "phone", "label": "Phone", "fieldtype": "Phone"},
+    {"fieldname": "email", "label": "Email", "fieldtype": "Data"},
+    {"fieldname": "source", "label": "Source", "fieldtype": "Select", "options": "Website\nReferral\nAds\nWalk-in"},
+    {"fieldname": "status", "label": "Status", "fieldtype": "Select", "options": "New\nContacted\nQualified\nLost", "default": "New"},
+    {"fieldname": "assigned_to", "label": "Assigned To", "fieldtype": "Link", "options": "User"},
+    {"fieldname": "notes", "label": "Notes", "fieldtype": "Small Text"},
+    {"fieldname": "next_follow_up_date", "label": "Next Follow Up Date", "fieldtype": "Date"},
+    {"fieldname": "creation_date", "label": "Creation Date", "fieldtype": "Datetime", "read_only": 1}
+  ],
+  "permissions": [
+    {"role": "CRM User", "read": 1, "write": 1},
+    {"role": "CRM Manager", "read": 1, "write": 1, "create": 1, "submit": 1}
+  ]
+}
